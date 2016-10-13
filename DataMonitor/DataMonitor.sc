@@ -64,6 +64,8 @@ SWPlotterMonitor{
 		plotter = Plotter.new( "Plotter Monitor", Rect(600, 30, 800, 250) );
 		plotter.value_( updater.value ); // temporary workaround!
 		plotter.superpose_( true );
+		plotter = plotter.setProperties(\plotColor, [Color.black, Color.red, Color.blue, Color.green, Color.yellow]);
+
 		monitor = SWDataMonitor.new( updater,length,{ |data| plotter.value_( data ) }, nc, dt, skip );
 	}
 
