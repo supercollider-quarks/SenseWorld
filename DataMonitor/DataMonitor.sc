@@ -56,14 +56,19 @@ SWPlotterMonitor{
 	var <>plotter;
 	var <>monitor;
 
-	*new{ |updater,length,nc=1,dt=0.1,skip=1|
-		^super.new.init( updater,length,nc,dt,skip );
+	*new{ |updater,length,nc=1,dt=0.1,skip=1, bounds, parent|
+		^super.new.init( updater,length,nc,dt,skip, bounds, parent );
 	}
 
-	init{ |updater,length,nc=1,dt=0.1,skip=1|
-		plotter = Plotter.new( "Plotter Monitor", Rect(600, 30, 800, 250) );
+	init{ |updater,length,nc=1,dt=0.1,skip=1, bounds, parent|
+		bounds = bounds ? Rect(600, 30, 800, 250);
+		plotter = Plotter.new( "Plotter Monitor", bounds, parent );
 		plotter.value_( updater.value ); // temporary workaround!
 		plotter.superpose_( true );
+		plotter.setProperties( \plotColor, [
+			Color.red, Color.blue, Color.green, Color.magenta, Color.cyan, Color.yellow,
+			Color.red(0.9), Color.blue(0.9), Color.green(0.9), Color.magenta(0.9), Color.cyan(0.9), Color.yellow(0.9),
+		] );
 		monitor = SWDataMonitor.new( updater,length,{ |data| plotter.value_( data ) }, nc, dt, skip );
 	}
 

@@ -44,3 +44,30 @@ m.plotter.bounds_( Rect(100, 100, 700, 700))
 m.plotter.makeWindow;
 
 // also, all the keyboard shortcuts from Plotter work (found in the Plotter helpfile)
+
+b = Bus.control(s, 12);
+
+// get it once to prep variable
+b.getn( 12, { |v| v.postln; ~busValues = v } );
+~busValues.postln;
+
+(
+// task to get the values
+Tdef( \getBusValues, {
+	loop{
+		b.getn( 12, { |v| v.postln; ~busValues = v } );
+		0.1.wait;
+	};
+});
+);
+Tdef( \getBusValues ).play;
+
+(
+// look at the data
+m = SWPlotterMonitor.new( { ~busValues },
+    200, //nr of points to plot
+    b.numChannels, // number of channels
+    0.25, // plot dtime
+    1 // write every n data points
+    ).start;
+);
